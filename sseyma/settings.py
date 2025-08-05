@@ -27,7 +27,7 @@ SECRET_KEY = getenv("SECRET_KEY")
 DEBUG = getenv("IS_DEVELOPMENT", True)
 
 ALLOWED_HOSTS = [
-    "my-django-project-1-8rxr.onrender.com"
+    "*"
 ]
 
 
