@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-import os
+from os import getenv
 from django.contrib.messages import constants as message
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sew)_t!!zqaz37h8v0w4=&%a+2u_r=446=*^o#!%1-%v$l*c1r'
-
+# SECRET_KEY = 'django-insecure-sew)_t!!zqaz37h8v0w4=&%a+2u_r=446=*^o#!%1-%v$l*c1r'
+SECRET_KEY = getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = getenv("IS_DEVELOPMENT", True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    getenv("APP_HOST")
+]
 
 
 # Application definition
@@ -119,9 +121,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static/',
+    #os.path.join(BASE_DIR, 'static'),
+    #BASE_DIR / 'static/',
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "uploads"
