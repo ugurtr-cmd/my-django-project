@@ -1,0 +1,56 @@
+{% extends "layout_admin.html" %}
+{% load static %}
+
+{% block title %}Yazı Güncelle{% endblock title %}
+
+{% block css_file %}
+<link rel="stylesheet" href="{% static 'mainproject/css/admin.css' %}">
+{% endblock css_file %}
+
+{% block content %}
+<div class="container mt-5">
+  <h3 class="mb-4">✏️ Yazı Güncelle</h3>
+
+  <form method="post" enctype="multipart/form-data">  <!-- enctype ekledik -->
+    {% csrf_token %}
+    
+    <div class="form-group mb-3">
+      <label for="baslik">Başlık</label>
+      <input type="text" class="form-control" name="baslik" value="{{ yazi.title }}">
+    </div>
+
+    <div class="mb-3">
+      <label for="content" class="form-label">İçerik</label>
+      <textarea class="form-control" name="description" id="editor" rows="4">{{ yazi.description }}</textarea>
+    </div>
+
+    <!-- Resim yükleme alanı -->
+    <div class="form-group mb-3">
+      <label for="image">Resim</label>
+      <input type="file" class="form-control" name="image" accept="image/*">
+      {% if yazi.imageUrl %}
+        <div class="mt-2">
+          <small>Mevcut Resim:</small><br>
+          <img src="{{ yazi.imageUrl.url }}" alt="Current image" style="max-height: 250px;">
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="aktif">Aktif mi?</label>
+      <select name="aktif" class="form-control">
+        <option value="True" {% if yazi.isActive %}selected{% endif %}>Evet</option>
+        <option value="False" {% if not yazi.isActive %}selected{% endif %}>Hayır</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Kaydet</button>
+    <a href="{% url 'admin-yazi-listesi' %}" class="btn btn-secondary">İptal</a>
+  </form>
+</div>
+
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('editor');
+</script>
+{% endblock content %}

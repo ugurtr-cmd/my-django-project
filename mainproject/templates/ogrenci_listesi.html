@@ -1,0 +1,188 @@
+{% extends "layout_admin.html" %}
+{% load static %}
+{% block css_file %} <link rel="stylesheet" href="{% static 'mainproject/css/admin.css' %}">{% endblock css_file %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Öğrenci Listesi</h2>
+        <a href="{% url 'yeni_ogrenci' %}" class="btn btn-success">
+            <i class="fas fa-plus me-2"></i>Yeni Öğrenci
+        </a>
+    </div>
+    
+    <!-- Arama ve Filtreleme -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="q" placeholder="Öğrenci adıyla ara..." 
+                               value="{{ arama_terimi|default:'' }}">
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-select" name="seviye">
+                            <option value="">Tüm Seviyeler</option>
+                            {% for seviye in seviyeler %}
+                                <option value="{{ seviye.0 }}"
+                                    {% if request.GET.seviye == seviye.0 %}selected{% endif %}>
+                                    {{ seviye.1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-1"></i>Filtrele
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Öğrenci Listesi Tablosu -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Öğrenci</th>
+                            <th>Seviye</th>
+                            <th>Cüz Durumu</th>
+                            <th>Puan</th>
+                            <th>Kayıt Tarihi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ogrenci in ogrenciler %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {% if ogrenci.profil_foto %}
+                                        <img src="{{ ogrenci.profil_foto.url }}" class="rounded-circle me-3" width="40" height="40">
+                                    {% else %}
+                                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                             style="width:40px;height:40px;">
+                                            <i class="fas fa-user text-muted"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <strong>{{ ogrenci.ad_soyad }}</strong>
+                                        <div class="text-muted small">
+                                            {{ ogrenci.kayit_tarihi|date:"d/m/Y" }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-info">
+                                    {{ ogrenci.get_seviye_display }}
+                                </span>
+                            </td>
+                           <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 me-2" style="height: 10px;">
+                                        <div class="progress-bar" role="progressbar" 
+                                            style="width: {% widthratio ogrenci.mevcut_cuz 30 100 %}%;" 
+                                            aria-valuenow="{{ ogrenci.mevcut_cuz }}" 
+                                            aria-valuemin="0" 
+                                            aria-valuemax="30">
+                                        </div>
+                                    </div>
+                                    <small>{{ ogrenci.mevcut_cuz }}/30</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 me-2" style="height: 10px;">
+                                        <div class="progress-bar bg-success" role="progressbar" 
+                                            style="width: {{ ogrenci.puan }}%;" 
+                                            aria-valuenow="{{ ogrenci.puan }}" 
+                                            aria-valuemin="0" 
+                                            aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                    <small>{{ ogrenci.puan }}/100</small>
+                                </div>
+                            </td>
+                            <td>{{ ogrenci.kayit_tarihi|date:"d/m/Y" }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{% url 'ogrenci_detay' ogrenci.id %}" class="btn btn-sm btn-info" title="Detay">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{% url 'ogrenci_duzenle' ogrenci.id %}" class="btn btn-sm btn-warning" title="Düzenle">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'ogrenci_sil' ogrenci.id %}" class="btn btn-sm btn-danger" title="Sil">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4">
+                                <i class="fas fa-user-slash fa-2x mb-3 text-muted"></i>
+                                <h5>Kayıtlı öğrenci bulunamadı</h5>
+                                <p class="text-muted">Yeni öğrenci eklemek için "Yeni Öğrenci" butonunu kullanın</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Sayfalama -->
+            {% if ogrenciler.has_other_pages %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if ogrenciler.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?sayfa={{ ogrenciler.previous_page_number }}{% if arama_terimi %}&q={{ arama_terimi }}{% endif %}">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            <i class="fas fa-chevron-left"></i>
+                        </span>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in ogrenciler.paginator.page_range %}
+                        {% if ogrenciler.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?sayfa={{ num }}{% if arama_terimi %}&q={{ arama_terimi }}{% endif %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if ogrenciler.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?sayfa={{ ogrenciler.next_page_number }}{% if arama_terimi %}&q={{ arama_terimi }}{% endif %}">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

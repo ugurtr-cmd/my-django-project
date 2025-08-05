@@ -1,0 +1,57 @@
+{% extends "layout_admin.html" %}
+{% load static %}
+
+{% block css_file %} <link rel="stylesheet" href="{% static 'mainproject/css/admin.css' %}">{% endblock css_file %}
+
+{% block content %}
+<div class="container py-4">
+    <h2>Yeni Öğrenci Ekle</h2>
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">Ad Soyad</label>
+                <input type="text" class="form-control" name="ad_soyad" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Başlangıç Seviyesi</label>
+                <select class="form-select" name="seviye">
+                    {% for seviye in seviyeler %}
+                    <option value="{{ seviye.0 }}">{{ seviye.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Profil Fotoğrafı</label>
+                <input type="file" class="form-control" name="profil_foto">
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Başlangıç Cüzü</label>
+                <input type="number" class="form-control" name="mevcut_cuz" min="1" max="30" value="1">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Hedef Cüz</label>
+                <input type="number" class="form-control" name="hedef_cuz" min="1" max="30" value="30">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Başarı Puanı (1-100)</label>
+                <input type="number" class="form-control" name="puan" min="1" max="100" value="5">
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Özel Notlar</label>
+            <textarea class="form-control" name="ozel_notlar" rows="3"></textarea>
+        </div>
+        
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary btn-lg">Öğrenciyi Kaydet</button>
+            <a href="{% url 'ogrenci_listesi' %}" class="btn btn-secondary">İptal</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

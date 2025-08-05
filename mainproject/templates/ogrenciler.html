@@ -1,0 +1,60 @@
+{% extends "layout_admin.html" %}
+
+{% load static %}
+{% block title %}Öğrenciler | Şeyma {% endblock title %} 
+{% block css_file %} <link rel="stylesheet" href="{% static 'mainproject/css/admin.css' %}">{% endblock css_file %}
+{% block content %}
+        <!-- Main Content -->
+    <div class="main-panel">
+
+      <!-- Öğrenci Bölümü -->
+      <div class="section-box">
+        <h4>🎓 Öğrenciler</h4>
+        <form class="row g-3 mb-4">
+          <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Ad Soyad">
+          </div>
+          <div class="col-md-2">
+            <input type="number" class="form-control" placeholder="Not">
+          </div>
+          <div class="col-md-2">
+            <input type="number" class="form-control" placeholder="Puan">
+          </div>
+          <div class="col-md-4">
+            <button class="btn btn-success w-100">Öğrenci Ekle</button>
+          </div>
+        </form>
+        <table class="table table-bordered">
+          <thead class="table-light">
+            <tr>
+              <th>Ad Soyad</th>
+              <th>Not</th>
+              <th>Puan</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ahmet Demir</td>
+              <td>85</td>
+              <td>92</td>
+              <td>
+                <button class="btn btn-sm btn-warning">Düzenle</button>
+                <button class="btn btn-sm btn-danger">Sil</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Elif Kaya</td>
+              <td>90</td>
+              <td>95</td>
+              <td>
+                <button class="btn btn-sm btn-warning">Düzenle</button>
+                <button class="btn btn-sm btn-danger">Sil</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

@@ -1,0 +1,45 @@
+{% extends "layout_admin.html" %}
+{% load static %}
+
+{% block title %}Yazı Yönetimi | Admin{% endblock %}
+{% block css_file %} <link rel="stylesheet" href="{% static 'mainproject/css/admin.css' %}">{% endblock css_file %}
+{% block content %}
+<div class="container mt-4">
+  <h3 class="mb-3">📄 Tüm Yazılar</h3>
+  <table class="table table-striped table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Başlık</th>
+        <th>Tarih</th>
+        <th>Durum</th>
+        <th>İşlem</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for yazi in yazilar %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ yazi.title|truncatechars:50 }}</td>
+        <td>{{ yazi.tarih|date:"d.m.Y" }}</td>
+        <td>
+          {% if yazi.isActive %}
+            <span class="badge bg-success">Aktif</span>
+          {% else %}
+            <span class="badge bg-secondary">Pasif</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url "yazi-guncelle" yazi.id %}" class="btn btn-sm btn-primary">Güncelle</a>
+          <a href="{% url 'yazi-sil' yazi.id %}" class="btn btn-sm btn-danger">
+            Sil
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+        <tr><td colspan="5" class="text-center">Hiç yazı yok.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

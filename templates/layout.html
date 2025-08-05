@@ -1,0 +1,73 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block page_title %} {% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  {% block css_file %} {% endblock %}
+
+
+</head>
+<body>
+
+  {% include "messages.html" %}
+
+  <!-- Giriş Yap Butonu (En Üst) -->
+  <div class="topbar d-flex justify-content-between align-items-center px-3 py-2 bg-light">
+    {% if user.is_authenticated %}
+      <li class="list-unstyled">
+        <a href="{% url "cikis" %}" class="btn btn-outline-primary btn-sm">Çıkış Yap</a>
+        <a href="{% url "admin-paneli" %}" class="btn btn-outline-primary btn-sm">Admin Paneli</a>
+      </li>
+
+    {% else %}
+      <a href="{% url "login" %}" class="btn btn-outline-primary btn-sm">Giriş Yap</a>
+
+    {% endif %}
+
+    <!-- Arama Formu -->
+    <form class="d-flex" role="search" action="{% url 'search' %}" method="get">
+      <input class="form-control form-control-sm me-2" type="search" name="q" placeholder="Ara..." aria-label="Search">
+      <button class="btn btn-sm btn-outline-success" type="submit">Ara</button>
+    </form>
+  </div>
+
+  <!-- Logo ve Açıklama -->
+  <header>
+    <h1>ŞŞEYMA</h1>
+    <p>Fikirler, yazılar, teknoloji ve daha fazlası</p>
+  </header>
+
+  <!-- Menü -->
+  <nav class="custom-menu">
+    <a href="{% url 'home' %}">Ana Sayfa</a>
+    <a href="{% url 'blog' %}">Blog</a>
+    <a href="{% url 'hakkimda' %}">Hakkımda</a>
+    <a href="{% url 'iletisim' %}">İletişim</a>
+
+
+  </nav>
+
+
+
+  {% block content %}{% endblock %}
+
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Şeyma | Tüm hakları saklıdır.</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

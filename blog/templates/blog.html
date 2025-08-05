@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block page_title %}ŞŞEYMA - Blog {% endblock %}
+
+{% block css_file %} <link rel="stylesheet" href="{% static 'mainproject/css/style.css' %}"> {% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 text-center">
+  <h3 class="mb-4">📂 Kategoriler</h3>
+  <div class="d-flex flex-wrap justify-content-center gap-3">
+    {% for kategori in kategoriler %}
+      {% if selectCategory == kategori.slug %}
+        <a href="{% url "kategori" kategori.slug %}" class="btn btn-primary">{{kategori.name}}</a>
+      {% else %}
+        <a href="{% url "kategori" kategori.slug %}" class="btn btn-outline-primary">{{kategori.name}}</a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class="container mt-5">
+  <h2 class="section-title">📝 Tüm Blog Yazıları</h2>
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    {% if yazilar %}
+      {% for yazi in yazilar %}
+        <div class="col">
+          <div class="card h-100">
+            {% if yazi.imageUrl %}
+              <div class="card-img-container" style="height: 300px; overflow: hidden;">
+                <img src="{{ yazi.imageUrl.url }}" class="card-img-top h-100 w-100 object-fit-cover" alt="{{ yazi.title }}">
+              </div>
+            {% endif %}
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ yazi.title }}</h5>
+              <p class="card-text text-muted">
+                {{ yazi.description|striptags|truncatechars:120 }}
+              </p>
+              <div class="mt-auto">
+                  <a href="{% url "detay" yazi.slug %}" class="btn btn-outline-primary btn-sm">Devamını Oku</a>
+                {% if user.is_authenticated %}
+                  <a href="{% url "yazi-guncelle" yazi.id %}" class="btn btn-primary btn-sm">Yazıyı Düzenle</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="col-12">
+        <div class="alert alert-danger">Bu kategoride henüz yazı yok</div>
+      </div>
+    {% endif %}
+  </div>
+  
+  {% if yazilar.paginator.num_pages > 1 %}
+    <nav aria-label="Page navigation example" class="mt-4">
+      <ul class="pagination justify-content-center">
+        {% if yazilar.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{yazilar.previous_page_number}}">Geri</a></li>
+        {% else %}
+          <li class="page-item disabled"><a class="page-link" href="">Geri</a></li>
+        {% endif %}
+
+        {% for i in yazilar.paginator.page_range %}
+          {% if yazilar.number == i %}
+            <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+          {% endif %}
+        {% endfor %}
+        
+        {% if yazilar.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{yazilar.next_page_number}}">İleri</a></li>
+        {% else %}
+          <li class="page-item disabled"><a class="page-link" href="">İleri</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+</div>
+
+<style>
+  .object-fit-cover {
+    object-fit: cover;
+  }
+  .card-img-container {
+    background-color: #f8f9fa;
+  }
+  .card {
+    transition: transform 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+</style>
+
+{% endblock %}

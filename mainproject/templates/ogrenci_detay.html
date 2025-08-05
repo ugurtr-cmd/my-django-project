@@ -1,0 +1,80 @@
+{% extends "layout_admin.html" %}
+{% load static %}
+
+{% block css_file %} <link rel="stylesheet" href="{% static 'mainproject/css/admin.css' %}">{% endblock css_file %}
+
+{% block content %}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>{{ ogrenci.ad_soyad }}</h2>
+        <a href="{% url 'ogrenci_listesi' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Listeye Dön
+        </a>
+    </div>
+    
+    <div class="row">
+        <!-- Sol Panel - Öğrenci Bilgileri -->
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>Öğrenci Profili</h5>
+                </div>
+                <div class="card-body">
+                    {% if ogrenci.profil_foto %}
+                    <img src="{{ ogrenci.profil_foto.url }}" class="rounded-circle mb-3 d-block mx-auto" width="150" height="150">
+                    {% else %}
+                    <div class="bg-light rounded-circle mb-3 d-flex align-items-center justify-content-center mx-auto" style="width:150px;height:150px;">
+                        <i class="fas fa-user fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <table class="table table-sm">
+                        <tr><th>Seviye:</th><td>{{ ogrenci.get_seviye_display }}</td></tr>
+                        <tr><th>Kayıt Tarihi:</th><td>{{ ogrenci.kayit_tarihi }}</td></tr>
+                        <tr><th>Mevcut Cüz:</th><td>{{ ogrenci.mevcut_cuz }}</td></tr>
+                        <tr><th>Hedef Cüz:</th><td>{{ ogrenci.hedef_cuz }}</td></tr>
+                        <tr><th>Puan:</th><td>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ ogrenci.puan }}0%;" 
+                                     aria-valuenow="{{ ogrenci.puan }}" 
+                                     aria-valuemin="1" 
+                                     aria-valuemax="10">
+                                    {{ ogrenci.puan }}/10
+                                </div>
+                            </div>
+                        </td></tr>
+                    </table>
+                    
+                    <a href="{% url 'ogrenci_duzenle' ogrenci.id %}" class="btn btn-primary w-100">
+                        <i class="fas fa-edit me-2"></i>Profili Düzenle
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sağ Panel - Özel Notlar -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5>Özel Notlar</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'ogrenci_not_ekle' ogrenci.id %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {% if ogrenci.ozel_notlar %}
+                                <textarea class="form-control" name="ozel_not" rows="5">{{ ogrenci.ozel_notlar }}</textarea>
+                            {% else %}
+                                <textarea class="form-control" name="ozel_not" rows="5" placeholder="Öğrenci hakkında notlarınızı buraya yazın..."></textarea>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Notları Kaydet</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
