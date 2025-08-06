@@ -125,7 +125,8 @@ USE_TZ = True
 STATIC_ROOT = BASE_DIR / "static"
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
- 
+    BASE_DIR / "blog/static",  # Eğer bu dizin gerçekten varsa
+    BASE_DIR / "mainproject/static",  # Eğer bu dizin gerçekten varsa
 ]
 
 MEDIA_URL = '/media/'
