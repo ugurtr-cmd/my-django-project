@@ -129,7 +129,7 @@ USE_TZ = True
 #]
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # collectstatic buraya toplayacak
+STATIC_ROOT = BASE_DIR / 'static'  # collectstatic buraya toplayacak
 STATICFILES_DIRS = [
     BASE_DIR / 'static',  # Geliştirme ortamında kullanılacak static dosyalar
 ]
