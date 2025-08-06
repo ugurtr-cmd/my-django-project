@@ -124,7 +124,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'  
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # ✅ Farklı bir isim kullanın
+STATIC_ROOT = BASE_DIR / 'static'  # ✅ Farklı bir isim kullanın
 STATICFILES_DIRS = [] 
 
 MEDIA_URL = '/media/'
