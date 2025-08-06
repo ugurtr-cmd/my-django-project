@@ -127,12 +127,9 @@ USE_TZ = True
 #    os.path.join(BASE_DIR, 'static'),
 #    BASE_DIR / 'static/',
 #]
-
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'static'  # collectstatic buraya toplayacak
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',  # Geliştirme ortamında kullanılacak static dosyalar
-]
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # collectstatic buraya toplar
+STATICFILES_DIRS = []
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "uploads"
