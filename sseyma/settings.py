@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = 'django-insecure-sew)_t!!zqaz37h8v0w4=&%a+2u_r=446=*^o#!%1-%v$l*c1r'
 SECRET_KEY = "c@m!v)tj0+41p0n_tfdte(x)kufj6o@dtae493ln&!&e02712g"
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '*'
@@ -125,8 +125,7 @@ USE_TZ = True
 STATIC_ROOT = BASE_DIR / "static"
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "blog/static",  # Eğer bu dizin gerçekten varsa
-    BASE_DIR / "mainproject/static",  # Eğer bu dizin gerçekten varsa
+
 ]
 
 MEDIA_URL = '/media/'
