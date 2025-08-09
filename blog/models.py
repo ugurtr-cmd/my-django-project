@@ -1,14 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
 # Create your models here.
-class SiteContent(models.Model):
-    slug = models.SlugField(unique=True)  # örn: 'hakkimda', 'anasayfa-alt-metin'
-    baslik = models.CharField(max_length=200, blank=True)
-    icerik = models.TextField(blank=True)
-    guncellenme_tarihi = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.slug
     
 class category(models.Model):
     name = models.CharField(max_length=50)
