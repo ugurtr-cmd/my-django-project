@@ -129,7 +129,7 @@ STATICFILES_DIRS = ['/static/']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "uploads"
-
+CACHE_MIDDLEWARE_SECONDS = 86400
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
