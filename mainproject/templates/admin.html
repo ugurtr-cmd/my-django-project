@@ -2,16 +2,14 @@
 
 {% load static %}
 {% block title %}Yönetim Paneli | Şeyma {% endblock title %} 
-{% block css_file %} <link rel="stylesheet" href="{% static 'mainproject/css/admin.css' %}">{% endblock css_file %}
 {% block content %}
 
     <!-- Main Content -->
     <div class="main-panel">
-
       <!-- Yazı Yazma Alanı -->
       <div class="section-box">
         <h4>📝 Yeni Yazı Oluştur</h4>
-        <form action="{% url "admin-paneli" %}" method="POST" enctype="multipart/form-data">
+        <form action="{% url 'admin-paneli' %}" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           {% if error %}
             <div class="alert alert-danger">{{msg}}</div>
@@ -44,11 +42,13 @@
           <button class="btn btn-primary">Yayımla</button>
         </form>
       </div>
-      
 
 <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
 <script>
-    CKEDITOR.replace('editor');
+    CKEDITOR.replace('editor', {
+        width: '100%',
+        height: '300px'
+    });
 </script>
 
 {% endblock content %}
