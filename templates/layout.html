@@ -1,54 +1,73 @@
-{% extends "layout_admin.html" %}
-
 {% load static %}
-{% block title %}Yönetim Paneli | Şeyma {% endblock title %} 
-{% block content %}
 
-    <!-- Main Content -->
-    <div class="main-panel">
-      <!-- Yazı Yazma Alanı -->
-      <div class="section-box">
-        <h4>📝 Yeni Yazı Oluştur</h4>
-        <form action="{% url 'admin-paneli' %}" method="POST" enctype="multipart/form-data">
-          {% csrf_token %}
-          {% if error %}
-            <div class="alert alert-danger">{{msg}}</div>
-          {% endif %}
-          <div class="mb-3">
-            <label for="title" class="form-label">Başlık</label>
-            <input type="text" name="title" class="form-control" id="title" placeholder="Yazı başlığı">
-          </div>
-          <div class="mb-3">
-            <label for="content" class="form-label">İçerik</label>
-            <textarea class="form-control" name="description" id="editor" rows="4" placeholder="Yazı içeriğini buraya girin..."></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="category" class="form-label">Kategori</label>
-            <select name="category" class="form-select" id="category">
-              {% for cat in kategoriler %}
-                <option value="{{ cat.id }}">{{ cat.name }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="imageUrl" class="form-label">Fotoğraf</label>
-            <input type="file" name="image" class="form-control" id="imageUrl">
-          </div>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block page_title %} {% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-          <div class="form-check mb-3">
-            <input type="checkbox" name="isActive" class="form-check-input" checked>
-            <label for="isActive" name="isActive" class="form-check-label">Aktiflik</label>
-          </div>
-          <button class="btn btn-primary">Yayımla</button>
-        </form>
-      </div>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
-<script>
-    CKEDITOR.replace('editor', {
-        width: '100%',
-        height: '300px'
-    });
-</script>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
-{% endblock content %}
+  {% block css_file %} {% endblock %}
+
+
+</head>
+<body>
+
+  {% include "messages.html" %}
+
+  <!-- Giriş Yap Butonu (En Üst) -->
+  <div class="topbar d-flex justify-content-between align-items-center px-3 py-2 bg-light">
+    {% if user.is_authenticated %}
+      <li class="list-unstyled">
+        <a href="{% url "cikis" %}" class="btn btn-outline-primary btn-sm">Çıkış Yap</a>
+        <a href="{% url "admin-paneli" %}" class="btn btn-outline-primary btn-sm">Admin Paneli</a>
+      </li>
+
+    {% else %}
+      <a href="{% url "login" %}" class="btn btn-outline-primary btn-sm">Giriş Yap</a>
+
+    {% endif %}
+
+    <!-- Arama Formu -->
+    <form class="d-flex" role="search" action="{% url 'search' %}" method="get">
+      <input class="form-control form-control-sm me-2" type="search" name="q" placeholder="Ara..." aria-label="Search">
+      <button class="btn btn-sm btn-outline-success" type="submit">Ara</button>
+    </form>
+  </div>
+
+  <!-- Logo ve Açıklama -->
+  <header>
+    <h1>ŞŞEYMA</h1>
+    <p>Fikirler, yazılar, teknoloji ve daha fazlası</p>
+  </header>
+
+  <!-- Menü -->
+  <nav class="custom-menu">
+    <a href="{% url 'home' %}">Ana Sayfa</a>
+    <a href="{% url 'blog' %}">Blog</a>
+    <a href="{% url 'hakkimda' %}">Hakkımda</a>
+    <a href="{% url 'iletisim' %}">İletişim</a>
+
+
+  </nav>
+
+
+
+  {% block content %}{% endblock %}
+
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Şeyma | Tüm hakları saklıdır.</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
